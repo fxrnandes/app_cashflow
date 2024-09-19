@@ -8,10 +8,13 @@ class WelcomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF4180AB), // Cor de fundo
-      body: Center(
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 32.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            const Spacer(),
+
             // Título
             Text(
               'Cashflow',
@@ -22,10 +25,8 @@ class WelcomeScreen extends StatelessWidget {
               ),
             ),
 
-            // Ajuste no espaçamento
-            const SizedBox(height: 0),
-
             // Subtítulo
+            const SizedBox(height: 0),
             Text(
               'Controle financeiro fácil',
               style: GoogleFonts.inter(
@@ -47,10 +48,9 @@ class WelcomeScreen extends StatelessWidget {
               child: Image.asset('assets/images/logo.png', height: 150),
             ),
 
-            // Espaçamento entre a logo e o botão
-            const SizedBox(height: 100),
+            const Spacer(), // Adicionando espaço flexível
 
-            // Botão modificado
+            // Botão modificado no mesmo lugar que a NameInputScreen
             SizedBox(
               width: 300, // Largura do botão
               height: 60,  // Altura do botão
@@ -72,6 +72,8 @@ class WelcomeScreen extends StatelessWidget {
                 child: const Text('Comece Aqui'),
               ),
             ),
+
+            const SizedBox(height: 40), // Espaçamento inferior igual ao da NameInputScreen
           ],
         ),
       ),

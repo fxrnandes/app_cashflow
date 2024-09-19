@@ -1,5 +1,5 @@
-// salary_input_screen.dart
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class SalaryInputScreen extends StatefulWidget {
   const SalaryInputScreen({super.key});
@@ -13,33 +13,91 @@ class SalaryInputScreenState extends State<SalaryInputScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final userName = ModalRoute.of(context)!.settings.arguments as String?;
-
     return Scaffold(
-      appBar: AppBar(title: const Text("Digite seu salário")),
+      backgroundColor: Colors.white,
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 32.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text('Olá, $userName!', style: const TextStyle(fontSize: 18)),
-            TextFormField(
-              decoration: const InputDecoration(labelText: "Seu salário"),
-              keyboardType: TextInputType.number,
-              onChanged: (value) {
-                setState(() {
-                  salary = double.tryParse(value) ?? 0.0;
-                });
-              },
+            const Spacer(), // Adiciona espaço flexível no topo
+
+            // Título da tela
+            Text(
+              'Informe o seu salário',
+              style: GoogleFonts.inter(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                color: const Color(0xFF4180AB),
+              ),
+              textAlign: TextAlign.center,
             ),
+
             const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Navegação para a tela principal (a ser implementada)
-                Navigator.pushNamed(context, '/home');
-              },
-              child: const Text('Próximo'),
+
+            // Campo para inserir o salário
+            SizedBox(
+              width: 300,
+              child: TextFormField(
+                decoration: const InputDecoration(
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color(0xFF4180AB),
+                      width: 2,
+                    ),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color(0xFF4180AB),
+                      width: 2,
+                    ),
+                  ),
+                  labelText: "R\$",
+                  labelStyle: TextStyle(
+                    color: Color(0xFFBDD1DE),
+                    fontSize: 18,
+                  ),
+                ),
+                keyboardType: TextInputType.number,
+                style: GoogleFonts.inter(
+                  fontSize: 18,
+                  color: Colors.black,
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    salary = double.tryParse(value) ?? 0.0;
+                  });
+                },
+              ),
             ),
+
+            const Spacer(), // Adiciona espaço flexível antes do botão
+
+            // Botão "Próximo"
+            SizedBox(
+              width: 300,
+              height: 60,
+              child: ElevatedButton(
+                onPressed: () {
+                  // Navegação para a tela principal (a ser implementada)
+                  Navigator.pushNamed(context, '/home');
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF4180AB),
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  textStyle: GoogleFonts.inter(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                child: const Text('Próximo'),
+              ),
+            ),
+
+            const SizedBox(height: 40), // Espaçamento inferior igual às outras telas
           ],
         ),
       ),
