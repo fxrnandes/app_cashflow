@@ -1,5 +1,5 @@
-// main.dart
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'screens/welcome_screen.dart';
 import 'screens/name_input_screen.dart';
 import 'screens/salary_input_screen.dart';
@@ -15,6 +15,9 @@ class CashflowApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Cashflow',
+      theme: ThemeData(
+        textTheme: GoogleFonts.interTextTheme(), // Definindo Inter globalmente
+      ),
       initialRoute: '/',
       routes: {
         '/': (context) => const WelcomeScreen(),
