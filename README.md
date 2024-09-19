@@ -1,6 +1,6 @@
 # cashflow
 
-Um projeto flutter desenvolvido por Vinicius Fernaneds Carvalho e Gabriel Wendorff, alunos do 4° semestre de engenharia de software da Católica SC.
+Um projeto flutter desenvolvido por Vinicius Fernandes Carvalho e Gabriel Wendorff, alunos do 4° semestre de engenharia de software da Católica SC.
 
 O projeto CashFlow é um aplicativo de controle financeiro seguindo a premissa feita para a N1 da matéria de desenvolvimento mobile.
 
