@@ -37,15 +37,18 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
           'Olá, ${userName ?? 'Usuário'}!',
           style: GoogleFonts.inter(
             fontSize: 24,
             fontWeight: FontWeight.w600,
+            color: Colors.white,
           ),
         ),
         backgroundColor: const Color(0xFF4180AB),
+        automaticallyImplyLeading: false,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
@@ -54,21 +57,126 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             // Botões circulares
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Expanded(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal, // Permite rolar horizontalmente
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        _buildCircularButton('Entradas', Icons.arrow_downward),
-                        _buildCircularButton('Saídas', Icons.arrow_upward),
-                        _buildCircularButton('Relatório', Icons.pie_chart),
-                        _buildCircularButton('Configurações', Icons.settings),
-                        _buildCircularButtonClear('Limpar', Icons.backpack),
-                      ],
-                    ),
+                  child: Column(
+                    children: [
+                      RawMaterialButton(
+                        elevation: 2.0,
+                        fillColor: const Color(0xFFE4EBF0),
+                        padding: const EdgeInsets.all(12.5),
+                        shape: const CircleBorder(),
+                        child: const Icon(
+                          Icons.arrow_downward,
+                          size: 30.0,
+                          color: Color(0xFFE65F5F),
+                        ),
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/expense');
+                        },
+                      ),
+                      const SizedBox(height: 8.0),
+                      Text(
+                        'Cadastrar\nsaída',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.inter(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: const Color(0xFF4180AB),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                    children: [
+                      RawMaterialButton(
+                        elevation: 2.0,
+                        fillColor: const Color(0xFFE4EBF0),
+                        padding: const EdgeInsets.all(12.5),
+                        shape: const CircleBorder(),
+                        child: const Icon(
+                          Icons.arrow_upward,
+                          size: 30.0,
+                          color: Color(0xFF72C96A),
+                        ),
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/entry');
+                        },
+                      ),
+                      const SizedBox(height: 8.0),
+                      Text(
+                        'Cadastrar\nentrada',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.inter(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: const Color(0xFF4180AB),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                    children: [
+                      RawMaterialButton(
+                        elevation: 2.0,
+                        fillColor: const Color(0xFFE4EBF0),
+                        padding: const EdgeInsets.all(12.5),
+                        shape: const CircleBorder(),
+                        child: const Icon(
+                          Icons.settings,
+                          size: 30.0,
+                          color: Color(0xFF4180AB),
+                        ),
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/edit');
+                        },
+                      ),
+                      const SizedBox(height: 8.0),
+                      Text(
+                        'Editar\ninformações',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.inter(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: const Color(0xFF4180AB),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                    children: [
+                      RawMaterialButton(
+                        elevation: 2.0,
+                        fillColor: const Color(0xFFE4EBF0),
+                        padding: const EdgeInsets.all(12.5),
+                        shape: const CircleBorder(),
+                        child: const Icon(
+                          Icons.download,
+                          size: 30.0,
+                          color: Color(0xFF4180AB),
+                        ),
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/downloadSummary');
+                        },
+                      ),
+                      const SizedBox(height: 8.0),
+                      Text(
+                        'Baixar\nresumo',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.inter(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: const Color(0xFF4180AB),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],

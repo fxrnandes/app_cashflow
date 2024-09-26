@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'screens/welcome_screen.dart';
 import 'screens/name_input_screen.dart';
 import 'screens/salary_input_screen.dart';
 import 'screens/home_screen.dart';
+import 'screens/edit_screen.dart';
+import 'screens/entry_screen.dart';
+import 'screens/expense_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,6 +49,9 @@ class CashflowApp extends StatelessWidget {
                     : 'Usuário';
                 return HomeScreen(userName: userName);
               },
+              '/entry':(context) => const EntryScreen(),
+              '/edit':(context) => const EditScreen(),
+              '/expense':(context) => const ExpenseScreen(),
             },
           );
         }
