@@ -17,20 +17,39 @@ Future<void> limparSharedPreferences() async {
   await prefs.clear(); // Limpa todos os dados do SharedPreferences
 }
 
+
+
 class _HomeScreenState extends State<HomeScreen> {
   String? userName;
-
+  double? salario;
+  double? totalEntries;
   @override
   void initState() {
     super.initState();
-    carregarNomeAsync();  // Carrega o nome salvo assim que a tela é iniciada
+    carregarNomeAsync();
+    carregarsalario();  // Carrega o nome salvo assim que a tela é iniciada
+    _loadTotalEntries();
   }
 
+  Future<void> carregarsalario() async {
+    final prefs = await SharedPreferences.getInstance();
+    double? salary = prefs.getDouble('salary');
+    setState(() {
+      salario = salary ?? 0;
+    });
+  }
   Future<void> carregarNomeAsync() async {
     final prefs = await SharedPreferences.getInstance();
     String? nomeSalvo = prefs.getString('userName');
     setState(() {
       userName = nomeSalvo ?? widget.userName;  // Se o nome salvo for nulo, use o nome passado como argumento
+    });
+  }
+
+  Future<void> _loadTotalEntries() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      totalEntries = prefs.getDouble('totalEntries') ?? 0.0;
     });
   }
 
@@ -196,9 +215,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  _buildMoneySummary('Entradas', '+ R\$ 2000', 'Salário'),
+                  _buildMoneySummary('Salario', 'R\$ $salario', ''),
                   const SizedBox(height: 10),
-                  _buildMoneySummary('Saídas', '- R\$ 500', 'Aluguel'),
+                  _buildMoneySummary('Entradas', 'R\$ $totalEntries', '+'),
+                  const SizedBox(height: 8,),
+                  _buildMoneySummary("Total", '$totalEntries+$salario', ''),
                   const SizedBox(height: 10),
                   _buildMoneySummary('Saídas', '- R\$ 200', 'Transporte'),
                 ],
@@ -207,6 +228,23 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
+      bottomNavigationBar: BottomAppBar(child:                       RawMaterialButton(
+                        elevation: 2.0,
+                        fillColor: const Color(0xFFE4EBF0),
+                        padding: const EdgeInsets.all(12.5),
+                        shape: const CircleBorder(),
+                        child: const Icon(
+                          Icons.clear,
+                          size: 30.0,
+                          color: Color(0xFF4180AB),
+                        ),
+                        onPressed: () {
+                          limparSharedPreferences();
+
+                          Navigator.pushNamed(context, '/');
+                        },
+                      ),
+                    ),
     );
   }
 

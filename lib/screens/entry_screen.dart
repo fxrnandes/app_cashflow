@@ -1,16 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EntryScreen extends StatefulWidget {
   const EntryScreen({super.key});
 
   @override
-  EntryScreenState createState() => EntryScreenState();
+  _EntryScreenState createState() => _EntryScreenState();
 }
 
-class EntryScreenState extends State<EntryScreen> {
-  double entryValue = 0.0;
+class _EntryScreenState extends State<EntryScreen> {
+  double totalEntries = 0.0;
+  double entry = 0.0;
   String selectedCategory = 'Categoria 1';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadTotalEntries();  // Carregar o valor inicial salvo
+  }
+
+
+  // Carregar o valor de totalEntries do SharedPreferences
+  Future<void> _loadTotalEntries() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      totalEntries = prefs.getDouble('totalEntries') ?? 0.0;
+    });
+  }
+
+  // Função para adicionar um novo valor e salvar no SharedPreferences
+  Future<void> _addEntry(double value) async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      totalEntries += value;  // Soma o novo valor ao total
+    });
+    await prefs.setDouble('totalEntries', totalEntries);  // Salva o novo total
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +108,7 @@ class EntryScreenState extends State<EntryScreen> {
               ),
               onChanged: (value) {
                 setState(() {
-                  entryValue = double.tryParse(value) ?? 0.0;
+                  entry = double.tryParse(value) ?? 0.0;
                 });
               },
             ),
@@ -140,8 +167,9 @@ class EntryScreenState extends State<EntryScreen> {
               width: 300,
               height: 60,
               child: ElevatedButton(
-                onPressed: () {
-                  // Lógica para salvar a entrada
+                onPressed: ()  async {
+                  await _addEntry(entry);
+                  Navigator.pushNamed(context, '/home');
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF72C96A),
