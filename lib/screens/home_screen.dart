@@ -11,6 +11,12 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
+// Função para limpar o SharedPreferences
+Future<void> limparSharedPreferences() async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.clear(); // Limpa todos os dados do SharedPreferences
+}
+
 class _HomeScreenState extends State<HomeScreen> {
   String? userName;
 
@@ -50,15 +56,24 @@ class _HomeScreenState extends State<HomeScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _buildCircularButton('Entradas', Icons.arrow_downward),
-                _buildCircularButton('Saídas', Icons.arrow_upward),
-                _buildCircularButton('Relatório', Icons.pie_chart),
-                _buildCircularButton('Configurações', Icons.settings),
+                Expanded(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal, // Permite rolar horizontalmente
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        _buildCircularButton('Entradas', Icons.arrow_downward),
+                        _buildCircularButton('Saídas', Icons.arrow_upward),
+                        _buildCircularButton('Relatório', Icons.pie_chart),
+                        _buildCircularButton('Configurações', Icons.settings),
+                        _buildCircularButtonClear('Limpar', Icons.backpack),
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
-
             const SizedBox(height: 30),
-
             // Resumo de gestão de dinheiro
             Expanded(
               child: Column(
@@ -73,13 +88,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  
                   _buildMoneySummary('Entradas', '+ R\$ 2000', 'Salário'),
                   const SizedBox(height: 10),
-                  
                   _buildMoneySummary('Saídas', '- R\$ 500', 'Aluguel'),
                   const SizedBox(height: 10),
-                  
                   _buildMoneySummary('Saídas', '- R\$ 200', 'Transporte'),
                 ],
               ),
@@ -97,6 +109,39 @@ class _HomeScreenState extends State<HomeScreen> {
         ElevatedButton(
           onPressed: () {
             // Navegação para outras telas
+          },
+          style: ElevatedButton.styleFrom(
+            shape: const CircleBorder(),
+            padding: const EdgeInsets.all(20),
+            backgroundColor: const Color(0xFF4180AB),
+          ),
+          child: Icon(
+            icon,
+            size: 30,
+            color: Colors.white,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          label,
+          style: GoogleFonts.inter(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Função para construir o botão circular de limpar
+  Widget _buildCircularButtonClear(String label, IconData icon) {
+    return Column(
+      children: [
+        ElevatedButton(
+          onPressed: () async {
+            await limparSharedPreferences();
+            // Recarregar ou fechar o app para simular uma nova primeira vez
+            Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
           },
           style: ElevatedButton.styleFrom(
             shape: const CircleBorder(),
