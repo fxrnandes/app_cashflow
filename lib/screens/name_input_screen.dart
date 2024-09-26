@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NameInputScreen extends StatefulWidget {
   const NameInputScreen({super.key});
@@ -10,6 +11,13 @@ class NameInputScreen extends StatefulWidget {
 
 class NameInputScreenState extends State<NameInputScreen> {
   String userName = '';
+
+  // Função para salvar o nome no SharedPreferences
+  Future<void> salvarNome() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('userName', userName);
+    print('Nome salvo: $userName'); // Apenas para ver no console que o nome foi salvo
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,8 +77,9 @@ class NameInputScreenState extends State<NameInputScreen> {
               width: 300,
               height: 60,
               child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/salary');
+                onPressed: () async {
+                  await salvarNome(); // Salva o nome no dispositivo
+                  Navigator.pushNamed(context, '/salary'); // Vai para a próxima tela
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF4180AB),

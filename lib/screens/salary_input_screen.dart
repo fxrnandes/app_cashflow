@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SalaryInputScreen extends StatefulWidget {
   const SalaryInputScreen({super.key});
@@ -10,6 +11,28 @@ class SalaryInputScreen extends StatefulWidget {
 
 class SalaryInputScreenState extends State<SalaryInputScreen> {
   double salary = 0.0;
+  String? userName;
+
+  // Carregar o nome salvo
+  Future<void> carregarNomeAsync() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? nomeSalvo = prefs.getString('userName');
+    setState(() {
+      userName = nomeSalvo ?? 'Usuário';
+    });
+  }
+
+  // Salvar o salário localmente
+  Future<void> salvarSalario() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble('salary', salary);  // Salva o salário
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    carregarNomeAsync();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,9 +43,7 @@ class SalaryInputScreenState extends State<SalaryInputScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Spacer(), // Adiciona espaço flexível no topo
-
-            // Título da tela
+            const Spacer(),
             Text(
               'Informe o seu salário',
               style: GoogleFonts.inter(
@@ -32,10 +53,7 @@ class SalaryInputScreenState extends State<SalaryInputScreen> {
               ),
               textAlign: TextAlign.center,
             ),
-
             const SizedBox(height: 20),
-
-            // Campo para inserir o salário
             SizedBox(
               width: 300,
               child: TextFormField(
@@ -70,17 +88,18 @@ class SalaryInputScreenState extends State<SalaryInputScreen> {
                 },
               ),
             ),
-
-            const Spacer(), // Adiciona espaço flexível antes do botão
-
-            // Botão "Próximo"
+            const Spacer(),
             SizedBox(
               width: 300,
               height: 60,
               child: ElevatedButton(
-                onPressed: () {
-                  // Navegação para a tela principal (a ser implementada)
-                  Navigator.pushNamed(context, '/home');
+                onPressed: () async {
+                  await salvarSalario();
+                  Navigator.pushNamed(
+                    context,
+                    '/home',
+                    arguments: userName,
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF4180AB),
@@ -96,8 +115,7 @@ class SalaryInputScreenState extends State<SalaryInputScreen> {
                 child: const Text('Próximo'),
               ),
             ),
-
-            const SizedBox(height: 40), // Espaçamento inferior igual às outras telas
+            const SizedBox(height: 40),
           ],
         ),
       ),

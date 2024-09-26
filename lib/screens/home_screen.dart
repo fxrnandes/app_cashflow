@@ -1,17 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   final String userName;
 
   const HomeScreen({super.key, required this.userName});
+
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  String? userName;
+
+  @override
+  void initState() {
+    super.initState();
+    carregarNomeAsync();  // Carrega o nome salvo assim que a tela é iniciada
+  }
+
+  Future<void> carregarNomeAsync() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? nomeSalvo = prefs.getString('userName');
+    setState(() {
+      userName = nomeSalvo ?? widget.userName;  // Se o nome salvo for nulo, use o nome passado como argumento
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Olá, $userName!',
+          'Olá, ${userName ?? 'Usuário'}!',
           style: GoogleFonts.inter(
             fontSize: 24,
             fontWeight: FontWeight.w600,
