@@ -39,7 +39,7 @@ class SalaryInputScreenState extends State<SalaryInputScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32.0),
+        padding: const EdgeInsets.symmetric(horizontal: 64.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 
 class HomeScreen extends StatefulWidget {
   final String userName;
@@ -17,32 +18,34 @@ Future<void> limparSharedPreferences() async {
   await prefs.clear(); // Limpa todos os dados do SharedPreferences
 }
 
-
-
 class _HomeScreenState extends State<HomeScreen> {
   String? userName;
   double? salario;
   double? totalEntries;
+  double? sumEntries;
+
   @override
   void initState() {
     super.initState();
     carregarNomeAsync();
-    carregarsalario();  // Carrega o nome salvo assim que a tela é iniciada
+    carregarSalario(); // Carrega o nome salvo assim que a tela é iniciada
     _loadTotalEntries();
   }
 
-  Future<void> carregarsalario() async {
+  Future<void> carregarSalario() async {
     final prefs = await SharedPreferences.getInstance();
     double? salary = prefs.getDouble('salary');
     setState(() {
       salario = salary ?? 0;
     });
+    _calculateSum(); // Recalcula a soma sempre que o salário é carregado
   }
+
   Future<void> carregarNomeAsync() async {
     final prefs = await SharedPreferences.getInstance();
     String? nomeSalvo = prefs.getString('userName');
     setState(() {
-      userName = nomeSalvo ?? widget.userName;  // Se o nome salvo for nulo, use o nome passado como argumento
+      userName = nomeSalvo ?? widget.userName; // Se o nome salvo for nulo, use o nome passado como argumento
     });
   }
 
@@ -50,6 +53,14 @@ class _HomeScreenState extends State<HomeScreen> {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       totalEntries = prefs.getDouble('totalEntries') ?? 0.0;
+    });
+    _calculateSum(); // Recalcula a soma sempre que as entradas são carregadas
+  }
+
+  // Função que calcula a soma das entradas e o salário
+  void _calculateSum() {
+    setState(() {
+      sumEntries = (salario ?? 0) + (totalEntries ?? 0);
     });
   }
 
@@ -84,11 +95,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       RawMaterialButton(
                         elevation: 2.0,
                         fillColor: const Color(0xFFE4EBF0),
-                        padding: const EdgeInsets.all(12.5),
+                        padding: const EdgeInsets.all(15),
                         shape: const CircleBorder(),
                         child: const Icon(
                           Icons.arrow_downward,
-                          size: 30.0,
+                          size: 35.0,
                           color: Color(0xFFE65F5F),
                         ),
                         onPressed: () {
@@ -114,11 +125,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       RawMaterialButton(
                         elevation: 2.0,
                         fillColor: const Color(0xFFE4EBF0),
-                        padding: const EdgeInsets.all(12.5),
+                        padding: const EdgeInsets.all(15),
                         shape: const CircleBorder(),
                         child: const Icon(
                           Icons.arrow_upward,
-                          size: 30.0,
+                          size: 35.0,
                           color: Color(0xFF72C96A),
                         ),
                         onPressed: () {
@@ -144,11 +155,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       RawMaterialButton(
                         elevation: 2.0,
                         fillColor: const Color(0xFFE4EBF0),
-                        padding: const EdgeInsets.all(12.5),
+                        padding: const EdgeInsets.all(15),
                         shape: const CircleBorder(),
                         child: const Icon(
                           Icons.settings,
-                          size: 30.0,
+                          size: 35.0,
                           color: Color(0xFF4180AB),
                         ),
                         onPressed: () {
@@ -158,36 +169,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       const SizedBox(height: 8.0),
                       Text(
                         'Editar\ninformações',
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.inter(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: const Color(0xFF4180AB),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: Column(
-                    children: [
-                      RawMaterialButton(
-                        elevation: 2.0,
-                        fillColor: const Color(0xFFE4EBF0),
-                        padding: const EdgeInsets.all(12.5),
-                        shape: const CircleBorder(),
-                        child: const Icon(
-                          Icons.download,
-                          size: 30.0,
-                          color: Color(0xFF4180AB),
-                        ),
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/downloadSummary');
-                        },
-                      ),
-                      const SizedBox(height: 8.0),
-                      Text(
-                        'Baixar\nresumo',
                         textAlign: TextAlign.center,
                         style: GoogleFonts.inter(
                           fontSize: 12,
@@ -215,100 +196,73 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  _buildMoneySummary('Salario', 'R\$ $salario', ''),
+                  _buildMoneySummary('Salário', 'R\$ $salario', ''),
                   const SizedBox(height: 10),
                   _buildMoneySummary('Entradas', 'R\$ $totalEntries', '+'),
-                  const SizedBox(height: 8,),
-                  _buildMoneySummary("Total", '$totalEntries+$salario', ''),
+                  const SizedBox(height: 8),
+                  _buildMoneySummary('Total', 'R\$ $sumEntries', ''),
                   const SizedBox(height: 10),
-                  _buildMoneySummary('Saídas', '- R\$ 200', 'Transporte'),
+                    Text(
+                    'Resumo de Despesas',
+                    style: GoogleFonts.inter(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      color: const Color(0xFF4180AB),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  FutureBuilder(
+                    future: SharedPreferences.getInstance(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        final prefs = snapshot.data;
+                        final expenses = prefs?.getString('expenses');
+                        final expenseMap = expenses != null ? jsonDecode(expenses) : {};
+
+                        if (expenseMap.isEmpty) {
+                          return const Center(
+                            child: Text('Nenhuma despesa registrada'),
+                          );
+                        } else {
+                          return Column(
+                            children: expenseMap.entries.map<Widget>((entry) {
+                              return ListTile(
+                                title: Text(entry.key),
+                                trailing: Text('R\$ ${entry.value}'),
+                              );
+                            }).toList(),
+                          );
+                        }
+                      } else {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                    },
+                  ),
                 ],
               ),
             ),
           ],
         ),
       ),
-      bottomNavigationBar: BottomAppBar(child:                       RawMaterialButton(
-                        elevation: 2.0,
-                        fillColor: const Color(0xFFE4EBF0),
-                        padding: const EdgeInsets.all(12.5),
-                        shape: const CircleBorder(),
-                        child: const Icon(
-                          Icons.clear,
-                          size: 30.0,
-                          color: Color(0xFF4180AB),
-                        ),
-                        onPressed: () {
-                          limparSharedPreferences();
-
-                          Navigator.pushNamed(context, '/');
-                        },
-                      ),
-                    ),
-    );
-  }
-
-  // Função para construir os botões circulares
-  Widget _buildCircularButton(String label, IconData icon) {
-    return Column(
-      children: [
-        ElevatedButton(
+      bottomNavigationBar: BottomAppBar(
+        child: RawMaterialButton(
+          elevation: 2.0,
+          fillColor: const Color(0xFFE4EBF0),
+          padding: const EdgeInsets.all(12.5),
+          shape: const CircleBorder(),
+          child: const Icon(
+            Icons.clear,
+            size: 30.0,
+            color: Color(0xFF4180AB),
+          ),
           onPressed: () {
-            // Navegação para outras telas
+            limparSharedPreferences();
+            Navigator.pushNamed(context, '/');
           },
-          style: ElevatedButton.styleFrom(
-            shape: const CircleBorder(),
-            padding: const EdgeInsets.all(20),
-            backgroundColor: const Color(0xFF4180AB),
-          ),
-          child: Icon(
-            icon,
-            size: 30,
-            color: Colors.white,
-          ),
         ),
-        const SizedBox(height: 8),
-        Text(
-          label,
-          style: GoogleFonts.inter(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ],
-    );
-  }
-
-  // Função para construir o botão circular de limpar
-  Widget _buildCircularButtonClear(String label, IconData icon) {
-    return Column(
-      children: [
-        ElevatedButton(
-          onPressed: () async {
-            await limparSharedPreferences();
-            // Recarregar ou fechar o app para simular uma nova primeira vez
-            Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
-          },
-          style: ElevatedButton.styleFrom(
-            shape: const CircleBorder(),
-            padding: const EdgeInsets.all(20),
-            backgroundColor: const Color(0xFF4180AB),
-          ),
-          child: Icon(
-            icon,
-            size: 30,
-            color: Colors.white,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          label,
-          style: GoogleFonts.inter(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ],
+      ),
     );
   }
 

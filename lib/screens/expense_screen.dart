@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 
 class ExpenseScreen extends StatefulWidget {
   const ExpenseScreen({super.key});
@@ -11,6 +13,23 @@ class ExpenseScreen extends StatefulWidget {
 class ExpenseScreenState extends State<ExpenseScreen> {
   double expenseValue = 0.0;
   String selectedCategory = 'Despesa fixa';
+
+
+Future<void> _saveExpense() async {
+  final prefs = await SharedPreferences.getInstance();
+  final expenses = prefs.getString('expenses') ?? '{}';
+  final expenseMap = jsonDecode(expenses);
+
+  if (expenseMap.containsKey(selectedCategory)) {
+    final currentValue = double.parse(expenseMap[selectedCategory]);
+    final newValue = currentValue + expenseValue;
+    expenseMap[selectedCategory] = newValue.toString();
+  } else {
+    expenseMap[selectedCategory] = expenseValue.toString();
+  }
+
+  await prefs.setString('expenses', jsonEncode(expenseMap));
+}
 
   @override
   Widget build(BuildContext context) {
@@ -152,8 +171,9 @@ class ExpenseScreenState extends State<ExpenseScreen> {
               width: 300,
               height: 60,
               child: ElevatedButton(
-                onPressed: () {
-                  // Lógica para salvar a saída
+                onPressed: () async {
+                  await _saveExpense();
+                  Navigator.pushNamed(context, '/home');
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFE65F5F),

@@ -33,6 +33,7 @@ class CashflowApp extends StatelessWidget {
         } else {
           final isFirstTime = snapshot.data ?? true;
           return MaterialApp(
+              debugShowCheckedModeBanner: false,
             title: 'Cashflow',
             theme: ThemeData(
               textTheme: GoogleFonts.interTextTheme(),

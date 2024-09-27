@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+ 
 class EditScreen extends StatefulWidget {
   const EditScreen({super.key});
-
+ 
   @override
   EditScreenState createState() => EditScreenState();
 }
-
+ 
 class EditScreenState extends State<EditScreen> {
   String selectedOption = '';
-
+ 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,9 +30,8 @@ class EditScreenState extends State<EditScreen> {
                 },
               ),
             ),
-            
             const SizedBox(height: 40),
-
+ 
             Text(
               'Área de edição',
               style: GoogleFonts.inter(
@@ -60,66 +59,39 @@ class EditScreenState extends State<EditScreen> {
                   icon: Icons.arrow_upward,
                   color: const Color(0xFF72C96A),
                   text: 'Editar\nEntrada',
-                  value: 'Editar\nEntrada',
+                  route: '/selection_entry_screen',
                 ),
                 _buildCircularOption(
                   icon: Icons.arrow_downward,
                   color: const Color(0xFFE65F5F),
                   text: 'Editar\nSaída',
-                  value: 'Editar\nSaída',
+                  route: '/selection_expense_screen',
                 ),
                 _buildCircularOption(
                   icon: Icons.edit,
                   color: const Color(0xFF4180AB),
                   text: 'Editar\nInformações',
-                  value: 'Editar\nInformações',
+                  route: '/edit_name_screen',
                 ),
               ],
             ),
             const Spacer(),
-            SizedBox(
-              width: 300,
-              height: 60,
-              child: ElevatedButton(
-                onPressed: () {
-                  // Lógica para navegar para a tela de edição específica
-                  if (selectedOption.isNotEmpty) {
-                    Navigator.pushNamed(context, '/${selectedOption.toLowerCase().replaceAll(' ', '_')}');
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF4180AB),
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  textStyle: GoogleFonts.inter(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                child: const Text('Próximo'),
-              ),
-            ),
-            const SizedBox(height: 40),
           ],
         ),
       ),
     );
   }
-
+ 
   // Widget para construir as opções circulares
   Widget _buildCircularOption({
     required IconData icon,
     required Color color,
     required String text,
-    required String value,
+    required String route,
   }) {
     return GestureDetector(
       onTap: () {
-        setState(() {
-          selectedOption = value;
-        });
+        Navigator.pushNamed(context, route); // Navega para a tela correta
       },
       child: Column(
         children: [
@@ -129,9 +101,7 @@ class EditScreenState extends State<EditScreen> {
             padding: const EdgeInsets.all(15),
             shape: const CircleBorder(),
             onPressed: () {
-              setState(() {
-                selectedOption = value;
-              });
+              Navigator.pushNamed(context, route); // Navega para a tela correta
             },
             child: Icon(icon, size: 35.0, color: color),
           ),
