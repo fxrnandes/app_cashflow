@@ -127,7 +127,7 @@ class _EntryScreenState extends State<EntryScreen> {
                 ListTile(
                   title: const Text('Categoria 1'),
                   leading: Radio<String>(
-                    value: 'Categoria 1',
+                    value: 'Renda extra',
                     groupValue: selectedCategory,
                     onChanged: (value) {
                       setState(() {

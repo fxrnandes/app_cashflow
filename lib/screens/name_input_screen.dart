@@ -16,7 +16,6 @@ class NameInputScreenState extends State<NameInputScreen> {
   Future<void> salvarNome() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('userName', userName);
-    print('Nome salvo: $userName'); // Apenas para ver no console que o nome foi salvo
   }
 
   @override
