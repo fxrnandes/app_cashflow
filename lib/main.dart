@@ -33,26 +33,29 @@ class CashflowApp extends StatelessWidget {
         } else {
           final isFirstTime = snapshot.data ?? true;
           return MaterialApp(
-              debugShowCheckedModeBanner: false,
+            debugShowCheckedModeBanner: false,
             title: 'Cashflow',
             theme: ThemeData(
               textTheme: GoogleFonts.interTextTheme(),
             ),
+            // Defina a rota inicial baseada na verificação de primeira vez
             initialRoute: isFirstTime ? '/' : '/home',
             routes: {
               '/': (context) => const WelcomeScreen(),
               '/name': (context) => const NameInputScreen(),
               '/salary': (context) => const SalaryInputScreen(),
               '/home': (context) {
+                // Verifica se há argumentos para o nome do usuário
                 final arguments = ModalRoute.of(context)!.settings.arguments;
                 final userName = arguments != null
                     ? arguments as String
                     : 'Usuário';
                 return HomeScreen(userName: userName);
               },
-              '/entry':(context) => const EntryScreen(),
-              '/edit':(context) => const EditScreen(),
-              '/expense':(context) => const ExpenseScreen(),
+              '/entry': (context) => const EntryScreen(),
+              '/edit': (context) => const EditScreen(),
+              '/expense': (context) => const ExpenseScreen(),
+              '/screens/welcome_screen.dart': (context) => const WelcomeScreen(), // Adiciona a rota da welcome_screen
             },
           );
         }

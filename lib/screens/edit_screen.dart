@@ -1,16 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
- 
+import 'package:shared_preferences/shared_preferences.dart'; // Importa o SharedPreferences
+
 class EditScreen extends StatefulWidget {
   const EditScreen({super.key});
- 
+
   @override
   EditScreenState createState() => EditScreenState();
 }
- 
+
 class EditScreenState extends State<EditScreen> {
   String selectedOption = '';
- 
+
+  // Função para limpar o SharedPreferences
+  Future<void> limparSharedPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear(); // Limpa todos os dados do SharedPreferences
+
+    // Navega para a welcome_screen.dart após limpar
+    Navigator.pushNamed(context, '/screens/welcome_screen.dart');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +41,7 @@ class EditScreenState extends State<EditScreen> {
               ),
             ),
             const SizedBox(height: 40),
- 
+
             Text(
               'Área de edição',
               style: GoogleFonts.inter(
@@ -76,12 +86,31 @@ class EditScreenState extends State<EditScreen> {
               ],
             ),
             const Spacer(),
+            // Adicionando o botão de reset do app
+            ElevatedButton(
+              onPressed: () async {
+                await limparSharedPreferences(); // Chama a função para limpar os dados e redireciona
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF4180AB),
+                padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 40),
+              ),
+              child: Text(
+                'Reset do App',
+                style: GoogleFonts.inter(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
           ],
         ),
       ),
     );
   }
- 
+
   // Widget para construir as opções circulares
   Widget _buildCircularOption({
     required IconData icon,
