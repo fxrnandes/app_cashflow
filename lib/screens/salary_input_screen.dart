@@ -56,26 +56,14 @@ class SalaryInputScreenState extends State<SalaryInputScreen> {
                 ),
               ),
               const SizedBox(height: 40),
-              RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                  text: 'Informe o valor do seu ',
-                  style: GoogleFonts.inter(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                    color: const Color(0xFF4180AB),
-                  ),
-                  children: [
-                    TextSpan(
-                      text: 'salário',
-                      style: GoogleFonts.inter(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                        color: const Color(0xFFE65F5F),
-                      ),
-                    ),
-                  ],
+              Text(
+                'Informe o seu nome',
+                style: GoogleFonts.inter(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  color: const Color(0xFF4180AB),
                 ),
+                textAlign: TextAlign.center,
               ),
               const SizedBox(height: 20),
               TextFormField(
@@ -109,7 +97,7 @@ class SalaryInputScreenState extends State<SalaryInputScreen> {
                   });
                 },
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 400),
               SizedBox(
                 width: 300,
                 height: 60,
@@ -123,7 +111,7 @@ class SalaryInputScreenState extends State<SalaryInputScreen> {
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFE65F5F),
+                    backgroundColor: const Color(0xFF4180AB),
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
