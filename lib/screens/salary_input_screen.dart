@@ -22,11 +22,6 @@ class SalaryInputScreenState extends State<SalaryInputScreen> {
     });
   }
 
-  // Salvar o salário localmente
-  Future<void> salvarSalario() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setDouble('salary', salary);  // Salva o salário
-  }
 
   @override
   void initState() {
@@ -34,29 +29,56 @@ class SalaryInputScreenState extends State<SalaryInputScreen> {
     carregarNomeAsync();
   }
 
+  // Função para salvar o salário no SharedPreferences
+  Future<void> _saveSalary() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble('salary', salary);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 64.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const Spacer(),
-            Text(
-              'Informe o seu salário',
-              style: GoogleFonts.inter(
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-                color: const Color(0xFF4180AB),
+      body: SingleChildScrollView( // Adicionado SingleChildScrollView
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Align(
+                alignment: Alignment.topRight,
+                child: IconButton(
+                  icon: const Icon(Icons.close),
+                  color: const Color(0xFF4180AB),
+                  onPressed: () {
+                    Navigator.pop(context); // Fecha a tela ao clicar no "X"
+                  },
+                ),
               ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 20),
-            SizedBox(
-              width: 300,
-              child: TextFormField(
+              const SizedBox(height: 40),
+              RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                  text: 'Informe o valor do seu ',
+                  style: GoogleFonts.inter(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: const Color(0xFF4180AB),
+                  ),
+                  children: [
+                    TextSpan(
+                      text: 'salário',
+                      style: GoogleFonts.inter(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        color: const Color(0xFFE65F5F),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+              TextFormField(
                 decoration: const InputDecoration(
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
@@ -87,38 +109,39 @@ class SalaryInputScreenState extends State<SalaryInputScreen> {
                   });
                 },
               ),
-            ),
-            const Spacer(),
-            SizedBox(
-              width: 300,
-              height: 60,
-              child: ElevatedButton(
-                onPressed: () async {
-                  await salvarSalario();
-                  Navigator.pushNamed(
+              const SizedBox(height: 20),
+              SizedBox(
+                width: 300,
+                height: 60,
+                child: ElevatedButton(
+                  onPressed: () async {
+                    await _saveSalary(); // Chama a função para salvar o salário
+                    Navigator.pushNamed(
                     context,
                     '/home',
                     arguments: userName,
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF4180AB),
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFFE65F5F),
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    textStyle: GoogleFonts.inter(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                  textStyle: GoogleFonts.inter(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  child: const Text('Próximo'),
                 ),
-                child: const Text('Próximo'),
               ),
-            ),
-            const SizedBox(height: 40),
-          ],
+              const SizedBox(height: 40),
+            ],
+          ),
         ),
       ),
     );
   }
 }
+

@@ -97,24 +97,25 @@ class _HomeScreenState extends State<HomeScreen> {
       netBalance = (sumEntries ?? 0) - (totalExpenses ?? 0);
     });
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: Text(
-          'Olá, ${userName ?? 'Usuário'}!',
-          style: GoogleFonts.inter(
-            fontSize: 24,
-            fontWeight: FontWeight.w600,
-            color: Colors.white,
-          ),
+  
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    backgroundColor: Colors.white,
+    appBar: AppBar(
+      title: Text(
+        'Olá, ${userName ?? 'Usuário'}!',
+        style: GoogleFonts.inter(
+          fontSize: 24,
+          fontWeight: FontWeight.w600,
+          color: Colors.white,
         ),
-        backgroundColor: const Color(0xFF4180AB),
-        automaticallyImplyLeading: false,
       ),
-      body: Padding(
+      backgroundColor: const Color(0xFF4180AB),
+      automaticallyImplyLeading: false,
+    ),
+    body: SingleChildScrollView(
+      child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -216,63 +217,57 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
             // Resumo de gestão de dinheiro
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 30),
-                  Text(
-                    'Resumo de entradas',
-                    style: GoogleFonts.inter(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      color: const Color(0xFF72C96A),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  _buildMoneySummary('Salário', 'R\$ $salario', ''),
-                  const SizedBox(height: 10),
-                  _buildMoneySummary('Renda extra', 'R\$ $totalEntries', ''),
-                  const SizedBox(height: 10),
-                  _buildMoneySummary('Total de entradas', 'R\$ $sumEntries', ''),
-                  const SizedBox(height: 10),
-                  Divider(
-                    color: Colors.grey[300],
-                    thickness: 2,
-                  ),
-                  Text(
-                    'Resumo de Despesas',
-                    style: GoogleFonts.inter(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      color: const Color(0xFFE65F5F),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  // Exibe as despesas por categoria
-                  ...expensesByCategory.entries.map((entry) {
-                    return _buildMoneySummary(
-                      entry.key, // Categoria
-                      'R\$ ${entry.value.toStringAsFixed(2)}', // Valor
-                      '',
-                    );
-                  }).toList(),
-                  const SizedBox(height: 10),
-                  Divider(
-                    color: Colors.grey[300],
-                    thickness: 2,
-                  ),
-                  const SizedBox(height: 10),
-                  _buildMoneySummary('Saldo final', 'R\$ $netBalance', ''),
-                ],
+            const SizedBox(height: 30),
+            Text(
+              'Resumo de entradas',
+              style: GoogleFonts.inter(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                color: const Color(0xFF72C96A),
               ),
             ),
+            const SizedBox(height: 10),
+            _buildMoneySummary('Salário', 'R\$ $salario', ''),
+            const SizedBox(height: 10),
+            _buildMoneySummary('Renda extra', 'R\$ $totalEntries', ''),
+            const SizedBox(height: 10),
+            _buildMoneySummary('Total de entradas', 'R\$ $sumEntries', ''),
+            const SizedBox(height: 10),
+            Divider(
+              color: Colors.grey[300],
+              thickness: 2,
+            ),
+            Text(
+              'Resumo de Despesas',
+              style: GoogleFonts.inter(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                color: const Color(0xFFE65F5F),
+              ),
+            ),
+            const SizedBox(height: 10),
+            // Exibe as despesas por categoria
+            ...expensesByCategory.entries.map((entry) {
+              return _buildMoneySummary(
+                entry.key, // Categoria
+                'R\$ ${entry.value.toStringAsFixed(2)}', // Valor
+                '',
+              );
+            }).toList(),
+            const SizedBox(height: 10),
+            Divider(
+              color: Colors.grey[300],
+              thickness: 2,
+            ),
+            const SizedBox(height: 10),
+            _buildMoneySummary('Saldo final', 'R\$ $netBalance', ''),
             const SizedBox(height: 20),
           ],
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 
   // Método para exibir o resumo das finanças
   Widget _buildMoneySummary(String title, String value, String subtitle) {

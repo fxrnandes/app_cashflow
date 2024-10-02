@@ -43,7 +43,8 @@ class _EntryScreenState extends State<EntryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Padding(
+      body: SingleChildScrollView(
+        child:  Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -162,7 +163,7 @@ class _EntryScreenState extends State<EntryScreen> {
                 ),
               ],
             ),
-            const Spacer(),
+              const SizedBox(height: 20), // Adicionei um espaçamento aqui
             SizedBox(
               width: 300,
               height: 60,
@@ -189,6 +190,7 @@ class _EntryScreenState extends State<EntryScreen> {
           ],
         ),
       ),
-    );
+    ),
+  );
   }
 }
