@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
+import 'screens/services/first_time_check.dart';
 import 'screens/welcome_screen.dart';
 import 'screens/name_input_screen.dart';
 import 'screens/salary_input_screen.dart';
@@ -18,10 +17,6 @@ void main() async {
 class CashflowApp extends StatelessWidget {
   const CashflowApp({super.key});
 
-  Future<bool> verificarPrimeiraVez() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('userName') == null; // Verifica se o nome já foi salvo
-  }
 
   @override
   Widget build(BuildContext context) {
