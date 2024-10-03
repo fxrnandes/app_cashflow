@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'services/shared_services.dart';
 
 class SalaryInputScreen extends StatefulWidget {
   const SalaryInputScreen({super.key});
@@ -29,12 +30,6 @@ class SalaryInputScreenState extends State<SalaryInputScreen> {
     carregarNomeAsync();
   }
 
-  // Função para salvar o salário no SharedPreferences
-  Future<void> _saveSalary() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setDouble('salary', salary);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,7 +52,7 @@ class SalaryInputScreenState extends State<SalaryInputScreen> {
               ),
               const SizedBox(height: 40),
               Text(
-                'Informe o seu nome',
+                'Informe o seu salário',
                 style: GoogleFonts.inter(
                   fontSize: 20,
                   fontWeight: FontWeight.w600,
@@ -103,7 +98,7 @@ class SalaryInputScreenState extends State<SalaryInputScreen> {
                 height: 60,
                 child: ElevatedButton(
                   onPressed: () async {
-                    await _saveSalary(); // Chama a função para salvar o salário
+                    await saveSalary(salary); // Chama a função para salvar o salário
                     Navigator.pushNamed(
                     context,
                     '/home',

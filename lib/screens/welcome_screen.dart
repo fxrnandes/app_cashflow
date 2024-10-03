@@ -9,7 +9,7 @@ class WelcomeScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFF4180AB), // Cor de fundo
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32.0),
+        padding: const EdgeInsets.symmetric(horizontal: 64.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [

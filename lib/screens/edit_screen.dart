@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'services/shared_services.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // Importa o SharedPreferences
 
 class EditScreen extends StatefulWidget {
@@ -12,14 +13,6 @@ class EditScreen extends StatefulWidget {
 class EditScreenState extends State<EditScreen> {
   String selectedOption = '';
 
-  // Função para limpar o SharedPreferences
-  Future<void> limparSharedPreferences() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.clear(); // Limpa todos os dados do SharedPreferences
-
-    // Navega para a welcome_screen.dart após limpar
-    Navigator.pushNamed(context, '/screens/welcome_screen.dart');
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,6 +83,7 @@ class EditScreenState extends State<EditScreen> {
             ElevatedButton(
               onPressed: () async {
                 await limparSharedPreferences(); // Chama a função para limpar os dados e redireciona
+                Navigator.pushNamed(context, '/screens/welcome_screen.dart');
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF4180AB),
